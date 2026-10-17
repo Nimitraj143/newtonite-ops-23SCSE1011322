@@ -8,7 +8,7 @@
   "migrate": "tsx src/migrate.ts",
   "test": "vitest run",
   "seed": "tsx src/seed.ts",
-  "worker": "tsx src/worker.ts"
+  "worker": "tsx src/workerMain.ts"
 },
   "keywords": [],
   "author": "",

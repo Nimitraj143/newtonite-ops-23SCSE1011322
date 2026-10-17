@@ -76,7 +76,7 @@ export async function processNextJob(): Promise<boolean> {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function main() {
+export async function runWorker() {
   console.log("worker started");
   for (;;) {
     try {
@@ -88,5 +88,3 @@ async function main() {
     }
   }
 }
-
-if (require.main === module) main();
