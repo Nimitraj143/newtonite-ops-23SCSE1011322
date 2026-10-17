@@ -38,3 +38,6 @@ pre { background: #fff; padding: 12px; border: 1px solid #ddd; border-radius: 6p
 .pr-urgent { background: #fee2e2; color: #991b1b; }
 .pr-high { background: #ffedd5; }
 button.ghost { background: transparent; color: inherit; border: 1px solid #9ca3af; }
+.notice { background: #fef3c7; color: #78350f; border: 1px solid #fcd34d; border-radius: 8px; padding: 10px 12px; margin: 12px 0; }
+.timeline { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 12px; }
+.timeline li { border-left: 3px solid #d1d5db; padding-left: 10px; font-size: 14px; }

@@ -2,10 +2,11 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./auth";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import ItemPage from "./pages/ItemPage.jsx";
 
 function Protected({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <p>Loading…</p>;
+  if (loading) return <p>Loading...</p>;
   return user ? children : <Navigate to="/login" replace />;
 }
 
@@ -14,6 +15,7 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Protected><Dashboard /></Protected>} />
+      <Route path="/items/:id" element={<Protected><ItemPage /></Protected>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
