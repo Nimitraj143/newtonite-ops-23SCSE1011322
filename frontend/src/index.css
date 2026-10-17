@@ -1,0 +1,14 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; color: #1a1a1a; background: #f6f7f9; }
+.page { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.top { display: flex; justify-content: space-between; align-items: center; padding: 8px 0 16px; border-bottom: 1px solid #ddd; margin-bottom: 16px; }
+.login { max-width: 380px; margin: 60px auto; background: #fff; padding: 24px; border: 1px solid #ddd; border-radius: 8px; }
+.login form { display: grid; gap: 12px; }
+label { display: grid; gap: 4px; font-size: 14px; }
+input, select, textarea { padding: 8px; border: 1px solid #bbb; border-radius: 6px; font: inherit; }
+button { padding: 8px 14px; border: 1px solid #333; background: #222; color: #fff; border-radius: 6px; cursor: pointer; font: inherit; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.link { background: none; border: none; color: #0b57d0; padding: 0; text-decoration: underline; }
+.error { color: #b3261e; }
+.demo { padding-left: 18px; font-size: 14px; }
+pre { background: #fff; padding: 12px; border: 1px solid #ddd; border-radius: 6px; }
