@@ -6,7 +6,8 @@
   "scripts": {
   "dev": "tsx watch src/index.ts",
   "migrate": "tsx src/migrate.ts",
-  "test": "vitest run"
+  "test": "vitest run",
+  "seed": "tsx src/seed.ts"
 },
   "keywords": [],
   "author": "",
