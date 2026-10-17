@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { http, newKey } from "../lib/http";
 
-const TYPES = ["incident", "request", "task", "payment"]; // <-- command ke output se badlein
+const TYPES = ["incident", "customer_issue", "payment", "compliance", "task"];
 const PRIORITIES = ["low", "medium", "high", "urgent"];
 
 export default function NewItemForm({ teams, onClose }) {
