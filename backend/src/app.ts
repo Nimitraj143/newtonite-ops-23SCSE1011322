@@ -2,7 +2,10 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { ZodError } from "zod";
 import { authRouter } from "./auth";
+import { itemsRouter } from "./items";
 import { HttpError } from "./errors";
+import { notificationsRouter } from "./notifications";
+
 
 export function createApp() {
   const app = express();
@@ -11,6 +14,8 @@ export function createApp() {
 
   app.get("/health", (_req, res) => res.json({ ok: true }));
   app.use("/auth", authRouter);
+  app.use("/items", itemsRouter);
+  app.use("/notifications", notificationsRouter);
 
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof HttpError) return res.status(err.status).json({ error: err.message, details: err.details });

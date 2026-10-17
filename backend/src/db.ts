@@ -1,5 +1,7 @@
 import "dotenv/config";
-import { Pool, PoolClient } from "pg";
+import { Pool, PoolClient, types } from "pg";
+
+types.setTypeParser(20, (v) => parseInt(v, 10));
 
 export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
