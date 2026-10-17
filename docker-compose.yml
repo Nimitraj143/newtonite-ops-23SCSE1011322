@@ -9,5 +9,46 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ops -d ops"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://ops:ops@db:5432/ops
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-real-deployments}
+      PORT: "4000"
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npm run migrate && npx tsx src/seedIfEmpty.ts && npx tsx src/index.ts"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4000/health || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+
+  worker:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://ops:ops@db:5432/ops
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-real-deployments}
+    depends_on:
+      api:
+        condition: service_healthy
+    command: npm run worker
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
 volumes:
   pgdata:
