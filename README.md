@@ -117,6 +117,51 @@ npm run dev            # app on http://localhost:5173
 
 Authorization is checked on the server for every request (the UI only hides buttons). A user's roles are read from the database on every request, so a role change takes effect immediately.
 
+## Architecture
+
+```mermaid
+flowchart LR
+    U[Browser<br/>React + TanStack Query] -->|HTTPS JSON<br/>JWT + Idempotency-Key| API
+
+    subgraph Docker Compose
+        API[API<br/>Node.js + Express]
+        W[Worker<br/>Node.js]
+        DB[(PostgreSQL 16)]
+        API -->|SQL + transactions| DB
+        W -->|poll jobs<br/>FOR UPDATE SKIP LOCKED| DB
+    end
+
+    API -.->|authorize<br/>every request| AUTH[permissions.ts<br/>roles from DB]
+```
+
+**What happens on one change** (for example assigning an item):
+
+```mermaid
+sequenceDiagram
+    participant B as Browser
+    participant A as API
+    participant D as PostgreSQL
+    participant W as Worker
+
+    B->>A: POST /items/:id/assign (version, Idempotency-Key)
+    A->>D: BEGIN
+    A->>D: authorize + UPDATE work_items WHERE version = n
+    alt version is stale
+        D-->>A: 0 rows updated
+        A-->>B: 409 Conflict (latest item)
+    else version matches
+        A->>D: INSERT activity_events (history)
+        A->>D: INSERT outbox_jobs (notify assignee)
+        A->>D: COMMIT (all or nothing)
+        A-->>B: 200 OK
+    end
+    W->>D: pick pending job (SKIP LOCKED)
+    W->>D: INSERT notification (deduped by dedupe_key)
+    W->>D: mark job done (retry with backoff, max 5)
+```
+
+**Main tables:** `users`, `teams`, `memberships` (user, team, role), `work_items` (with `version`), `activity_events` (append-only history), `idempotency_keys`, `outbox_jobs`, `notifications`.
+
 ## Project layout
 ```
 backend/      API, worker, migrations, seed script and tests
